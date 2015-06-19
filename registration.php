@@ -31,9 +31,9 @@
                 }elseif ($_POST['cardno']!=''){
                     //Process for cardno clashes. This probably shouldn't happen, but i haven't made cardno unique so it may happen.
                     $countQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE cardno='.$_POST['cardno'].';');      //Find number of entries with that cardno
-                    if ($countQuery instanceof SQLite3Result){      //Caes for only one result. Much the same as for id. This should not fail.
+                    if ($countQuery instanceof SQLite3Result){      
                         $countResult = $countQuery->fetchArray(SQLITE3_ASSOC);
-                        if ($countResult['count']==1){
+                        if ($countResult['count']==1){  //Cases for only one result. Much the same as for id. This should not fail.
                             $memberQuery = $db->query('SELECT id, firstName, lastName FROM '.$members.' WHERE cardno='.$_POST['cardno'].';');
                             if ($memberQuery instanceof SQLite3Result){
                                 $memberResult = $memberQuery->fetchArray(SQLITE3_ASSOC);
@@ -54,17 +54,56 @@
                             echo "\n";
                         }
                     }
-                }elseif (($_POST['firstName']!='') && ($_POST['lastName']!='')){
-                    $query = $db->query('SELECT id, firstName, lastName, cardno, count(*) FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" AND lastName="'.$_POST['lastName'].'";');
-                    if (isset($query)){
-                        $result = $query->fetchArray(SQLITE3_ASSOC);
-                        if ($result['count(*)']==1){
-                            if (isset($result['id'])){
-                                $stmt = $db->prepare('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1 WHERE id=:id;');
-                                $stmt->bindValue(':id',$result['id'],SQLITE3_INTEGER);
-                                $query = $stmt->execute();
-                                echo '<h4>'.$result['firstName'].' '.$result['lastName'].' marked as attending.</h4>';
+                }elseif (($_POST['firstName']!='') && ($_POST['lastName']=='')){ //firstName only searches
+                    //firstName clash check
+                    $countQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'";');
+                    if ($countQuery instanceof SQLite3Result){
+                        $memberResult = $countQuery->fetchArray(SQLITE3_ASSOC);
+                        if ($memberResult['count']==1){  //Case for no clashes
+                            $memberQuery = $db->query('SELECT id, firstName, lastName FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'";');
+                            if ($memberQuery instanceof SQLite3Result){
+                                $memberResult = $memberQuery->fetchArray(SQLITE3_ASSOC);
+                                if ($db->exec('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1 WHERE cardno='.$memberResult['id'].';')){
+                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
+                                }else{
+                                    echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
+                                }
                             }
+                        }else{  //Case for multiple results
+                            $memberQuery = $db->query('SELECT id, firstName, lastName, cardno FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'";');
+                            echo '<table><tr><th>First Name</th><th>Last Name</th><th>Bod Card Number</th></tr>';
+                            while ($row = $memberQuery->fetchArray(SQLITE3_ASSOC)){
+                                    echo '<tr><td>'.$row['firstName'].'</td><td>'.$row['lastName'].'</td><td>'.$row['cardno'].'</td>';
+                                    echo '<td><form method="post" action""><input style="visibility:hidden;display:none;" type="text" name="id" value="'.$row['id'].'"/><input type="submit" class="memberbutton" value="Mark Attending"/></form></td>';
+                            }
+                            echo '</table>';
+                            echo "\n";
+                        }
+                    }
+                }elseif (($_POST['firstName']=='') && ($_POST['lastName']!='')){ //lastName only searches
+                    //lastName clash check
+                    $countQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE lastName="'.$_POST['lastName'].'";');
+                    if ($countQuery instanceof SQLite3Result){
+                        $memberResult = $countQuery->fetchArray(SQLITE3_ASSOC);
+                        if ($memberResult['count']==1){  //Case for no clashes
+                            $memberQuery = $db->query('SELECT id, firstName, lastName FROM '.$members.' WHERE lastName="'.$_POST['lastName'].'";');
+                            if ($memberQuery instanceof SQLite3Result){
+                                $memberResult = $memberQuery->fetchArray(SQLITE3_ASSOC);
+                                if ($db->exec('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1 WHERE cardno='.$memberResult['id'].';')){
+                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
+                                }else{
+                                    echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
+                                }
+                            }
+                        }else{  //Case for multiple results
+                            $memberQuery = $db->query('SELECT id, firstName, lastName, cardno FROM '.$members.' WHERE lastName="'.$_POST['lastName'].'";');
+                            echo '<table><tr><th>First Name</th><th>Last Name</th><th>Bod Card Number</th></tr>';
+                            while ($row = $memberQuery->fetchArray(SQLITE3_ASSOC)){
+                                    echo '<tr><td>'.$row['firstName'].'</td><td>'.$row['lastName'].'</td><td>'.$row['cardno'].'</td>';
+                                    echo '<td><form method="post" action""><input style="visibility:hidden;display:none;" type="text" name="id" value="'.$row['id'].'"/><input type="submit" class="memberbutton" value="Mark Attending"/></form></td>';
+                            }
+                            echo '</table>';
+                            echo "\n";
                         }
                     }
                     
