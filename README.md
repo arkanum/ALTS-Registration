@@ -9,7 +9,7 @@ simple server like mongoose.
 Currently in alpha.
 
 ##Installation
-If you do not have server software allready, I am aiming for this to work with Cesanta Software's Mongoose:
+~~If you do not have server software allready, I am aiming for this to work with Cesanta Software's Mongoose:
 1.  Visit http://cesanta.com/mongoose.shtml and download Windows Mongoose + PHP Package
 2.  Extract the files to a foler
 3.  Open the folder named along the lines of php-5.X.X
@@ -19,6 +19,7 @@ If you do not have server software allready, I am aiming for this to work with C
 7.  Save the file, ensuring the name is php.ini
 8.  Go back to the main folder
 9.  Copy the contents of the Repositry into the web_root folder
-10. Go back to the main folder and double click the mongoose application.
+10. Go back to the main folder and double click the mongoose application.~~
+Mongoose is trial software. I need to find an alternative :(
 
 If you have allready have server software: Ensure that sqlite is enabled (default for php5.4 and above I think), then copy the files to the web directory
