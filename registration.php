@@ -5,6 +5,37 @@
 <div class="main">
     <div id="regisering">
     <?php
+    //$debug = 1;
+
+    class dateList {
+        
+        var $list;
+        var $currentDate;
+
+        function dateList($serial = null){ 
+            if($serial!=null){//Unserializing serialized null yeilds flase not null.
+                $this->list = unserialize($serial); 
+            }else{
+                $this->list = array();
+            }
+            $this->currentDate = $GLOBALS['date'];
+        }
+        function updateList(){
+            if(in_array($this->currentDate, $this->list)){
+                return 0;
+            }else{
+                $this->list[] = $this->currentDate;
+                return 1;
+            }
+        }
+
+        function outputForStorage(){
+            return serialize($this->list);
+        }
+
+    }
+
+
         //Check to confirm POST was used as request method
         if ($_SERVER['REQUEST_METHOD']=='POST'){
             echo '<h2>Attendance</h2>';
@@ -17,13 +48,20 @@
                     if ($countQuery instanceof SQLite3Result){
                         $countResult = $countQuery->fetchArray(SQLITE3_ASSOC);
                         if ($countResult['count']==1){
-                            $memberQuery = $db->query('SELECT firstName, lastName FROM '.$members.' WHERE id='.$_POST['id'].';');
+                            $memberQuery = $db->query('SELECT firstName, lastName, dateArray FROM '.$members.' WHERE id='.$_POST['id'].';');
                             if ($memberQuery instanceof SQLite3Result){
                                 $memberResult = $memberQuery->fetchArray(SQLITE3_ASSOC);
-                                if ($db->exec('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1 WHERE id='.$_POST['id'].';')){
-                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
+                                $tempDateArray = new dateList($memberResult['dateArray']);
+                                if ($tempDateArray->updateList()){
+                                    $stmt = $db->prepare('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1, dateArray =:array WHERE id='.$_POST['id'].';');
+                                    $stmt->bindParam(':array',$tempDateArray->outputForStorage());
+                                    if ($stmt->execute()){
+                                        echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
+                                    }else{
+                                        echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
+                                    }
                                 }else{
-                                    echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
+                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' has allready been marked as attending today.</h4>';
                                 }
                             }
                         }
@@ -37,7 +75,7 @@
                             $memberQuery = $db->query('SELECT id, firstName, lastName FROM '.$members.' WHERE cardno='.$_POST['cardno'].';');
                             if ($memberQuery instanceof SQLite3Result){
                                 $memberResult = $memberQuery->fetchArray(SQLITE3_ASSOC);
-                                if ($db->exec('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1 WHERE cardno='.$memberResult['id'].';')){
+                                if ($db->exec('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1 WHERE id='.$memberResult['id'].';')){
                                     echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
                                 }else{
                                     echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
@@ -65,7 +103,7 @@
                             $memberQuery = $db->query('SELECT id, firstName, lastName FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'";');
                             if ($memberQuery instanceof SQLite3Result){
                                 $memberResult = $memberQuery->fetchArray(SQLITE3_ASSOC);
-                                if ($db->exec('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1 WHERE cardno='.$memberResult['id'].';')){
+                                if ($db->exec('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1 WHERE id='.$memberResult['id'].';')){
                                     echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
                                 }else{
                                     echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
@@ -93,7 +131,7 @@
                             $memberQuery = $db->query('SELECT id, firstName, lastName FROM '.$members.' WHERE lastName="'.$_POST['lastName'].'";');
                             if ($memberQuery instanceof SQLite3Result){
                                 $memberResult = $memberQuery->fetchArray(SQLITE3_ASSOC);
-                                if ($db->exec('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1 WHERE cardno='.$memberResult['id'].';')){
+                                if ($db->exec('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1 WHERE id='.$memberResult['id'].';')){
                                     echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
                                 }else{
                                     echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
@@ -123,7 +161,7 @@
                             $memberQuery = $db->query('SELECT id, firstName, lastName FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" AND lastName="'.$_POST['lastName'].'";');
                             if ($memberQuery instanceof SQLite3Result){
                                 $memberResult = $memberQuery->fetchArray(SQLITE3_ASSOC);
-                                if ($db->exec('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1 WHERE cardno='.$memberResult['id'].';')){
+                                if ($db->exec('UPDATE '.$members.' SET sessionsAttended = sessionsAttended + 1 WHERE id='.$memberResult['id'].';')){
                                     echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
                                 }else{
                                     echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';

@@ -1,1 +1,1 @@
-trial table -- CREATE TABLE trial (id INTEGER PRIMARY KEY,firstName TEXT NOT NULL,lastName TEXT NOT NULL,cardno INTEGER,sessionsAttended INTEGER DEFAULT 0, comittee BOOLEAN);
+trial table -- CREATE TABLE trial (id INTEGER PRIMARY KEY,firstName TEXT NOT NULL,'lastName' TEXT NOT NULL,cardno INTEGER,sessionsAttended INTEGER DEFAULT 0, comittee BOOLEAN, dateArray BLOB)

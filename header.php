@@ -1,5 +1,7 @@
 <?php
     ini_set('display_errors', 'On');
+    $dateObject = new DateTime;
+    $date = $dateObject->format("d-m-Y");
 ?>
 <!DOCTYPE html>
 <html lang="en-gb">
@@ -25,4 +27,7 @@
                     </th>
                 </tr>
             </table>
+            <span id="datecheck">
+                <h3>Current Date: <?php echo $date;?> Is this correct? If not change your computers clock and restart the server.</h3>
+            </span>
         </div>

@@ -17,6 +17,7 @@ body{
 .header{
     margin:inherit;
     background-color:#0083af;
+    color:#FFFFFF;
     
 }
 .main{
@@ -43,7 +44,6 @@ body{
     list-style:none;
     padding-left:3%;
     padding-right:3%;
-    color:#FFFFFF;
 }
 a:link{
     color:inherit;
@@ -54,6 +54,12 @@ a:visited{
 a{
     color:inherit;
     text-decoration:none;
+}
+#datecheck{
+    color: inherit;
+    margin: 0 auto;
+    text-align: center;
+    
 }
 #existingmember{
     width:70%;
