@@ -103,11 +103,11 @@
                     }
                 }elseif (($_POST['firstName']!='') && ($_POST['lastName']=='')){ //firstName only searches
                     //firstName clash check
-                    $countQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'";');
+                    $countQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" COLLATE NOCASE;');
                     if ($countQuery instanceof SQLite3Result){
                         $countResult = $countQuery->fetchArray(SQLITE3_ASSOC);
                         if ($countResult['count']==1){  //Case for no clashes
-                            $memberQuery = $db->query('SELECT id, firstName, lastName, dateArray FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'";');
+                            $memberQuery = $db->query('SELECT id, firstName, lastName, dateArray FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" COLLATE NOCASE;');
                             if ($memberQuery instanceof SQLite3Result){
                                 $memberResult = $memberQuery->fetchArray(SQLITE3_ASSOC);
                                 $tempDateArray = new dateList($memberResult['dateArray']);
@@ -126,7 +126,7 @@
                         }elseif ($countResult['count']==0){ //Case for no results
                             echo '<h4>No matching results found.</h4>';
                         }else{  //Case for multiple results
-                            $memberQuery = $db->query('SELECT id, firstName, lastName, cardno FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'";');
+                            $memberQuery = $db->query('SELECT id, firstName, lastName, cardno FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" COLLATE NOCASE;');
                             echo '<table><tr><th>First Name</th><th>Last Name</th><th>Bod Card Number</th></tr>';
                             while ($row = $memberQuery->fetchArray(SQLITE3_ASSOC)){
                                     echo '<tr><td>'.$row['firstName'].'</td><td>'.$row['lastName'].'</td><td>'.$row['cardno'].'</td>';
@@ -138,11 +138,11 @@
                     }
                 }elseif (($_POST['firstName']=='') && ($_POST['lastName']!='')){ //lastName only searches
                     //lastName clash check
-                    $countQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE lastName="'.$_POST['lastName'].'";');
+                    $countQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE lastName="'.$_POST['lastName'].'"COLLATE NOCASE;');
                     if ($countQuery instanceof SQLite3Result){
                         $countResult = $countQuery->fetchArray(SQLITE3_ASSOC);
                         if ($countResult['count']==1){  //Case for no clashes
-                            $memberQuery = $db->query('SELECT id, firstName, lastName, dateArray FROM '.$members.' WHERE lastName="'.$_POST['lastName'].'";');
+                            $memberQuery = $db->query('SELECT id, firstName, lastName, dateArray FROM '.$members.' WHERE lastName="'.$_POST['lastName'].'" COLLATE NOCASE;');
                             if ($memberQuery instanceof SQLite3Result){
                                 $memberResult = $memberQuery->fetchArray(SQLITE3_ASSOC);
                                 $tempDateArray = new dateList($memberResult['dateArray']);
@@ -161,7 +161,7 @@
                         }elseif ($countResult['count']==0){ //Case for no results
                             echo '<h4>No matching results found.</h4>';
                         }else{  //Case for multiple results
-                            $memberQuery = $db->query('SELECT id, firstName, lastName, cardno FROM '.$members.' WHERE lastName="'.$_POST['lastName'].'";');
+                            $memberQuery = $db->query('SELECT id, firstName, lastName, cardno FROM '.$members.' WHERE lastName="'.$_POST['lastName'].'" COLLATE NOCASE;');
                             echo '<table><tr><th>First Name</th><th>Last Name</th><th>Bod Card Number</th></tr>';
                             while ($row = $memberQuery->fetchArray(SQLITE3_ASSOC)){
                                     echo '<tr><td>'.$row['firstName'].'</td><td>'.$row['lastName'].'</td><td>'.$row['cardno'].'</td>';
@@ -173,13 +173,13 @@
                     }
                     
                 }elseif (($_POST['firstName'] != '') && ($_POST['lastName'] != '')){ //firstName and lastName searches
-                    $andCountQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" AND lastName="'.$_POST['lastName'].'";');
-                    $orCountQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" OR lastName="'.$_POST['lastName'].'";');
+                    $andCountQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" AND lastName="'.$_POST['lastName'].'" COLLATE NOCASE;');
+                    $orCountQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" OR lastName="'.$_POST['lastName'].'" COLLATE NOCASE;');
                     if (($andCountQuery instanceof SQLite3Result) && ($orCountQuery instanceof SQLite3Result)){
                         $andCountResult = $andCountQuery->fetchArray(SQLITE3_ASSOC);
                         $orCountResult = $orCountQuery->fetchArray(SQLITE3_ASSOC);
                         if ($andCountResult['count']==1){//Case where andcount is 1
-                            $memberQuery = $db->query('SELECT id, firstName, lastName, dateArray FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" AND lastName="'.$_POST['lastName'].'";');
+                            $memberQuery = $db->query('SELECT id, firstName, lastName, dateArray FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" AND lastName="'.$_POST['lastName'].'" COLLATE NOCASE;');
                             if ($memberQuery instanceof SQLite3Result){
                                 $memberResult = $memberQuery->fetchArray(SQLITE3_ASSOC);
                                 $tempDateArray = new dateList($memberResult['dateArray']);
@@ -196,7 +196,7 @@
                                 }
                             }
                         }elseif ($andCountResult['count']>1){//Case where andcount >1
-                            $memberQuery = $db->query('SELECT id, firstName, lastName, cardno FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" AND lastName="'.$_POST['lastName'].'";');
+                            $memberQuery = $db->query('SELECT id, firstName, lastName, cardno FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" AND lastName="'.$_POST['lastName'].'" COLLATE NOCASE;');
                             echo '<table><tr><th>First Name</th><th>Last Name</th><th>Bod Card Number</th></tr>';
                             while ($row = $memberQuery->fetchArray(SQLITE3_ASSOC)){
                                     echo '<tr><td>'.$row['firstName'].'</td><td>'.$row['lastName'].'</td><td>'.$row['cardno'].'</td>';
@@ -205,7 +205,7 @@
                             echo '</table>';
                             echo "\n";
                         }elseif ($orCountResult['count']>1){//Case orcount >1
-                            $memberQuery = $db->query('SELECT id, firstName, lastName, cardno FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" OR lastName="'.$_POST['lastName'].'";');
+                            $memberQuery = $db->query('SELECT id, firstName, lastName, cardno FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" OR lastName="'.$_POST['lastName'].'" COLLATE NOCASE;');
                             echo '<table><tr><th>First Name</th><th>Last Name</th><th>Bod Card Number</th></tr>';
                             while ($row = $memberQuery->fetchArray(SQLITE3_ASSOC)){
                                     echo '<tr><td>'.$row['firstName'].'</td><td>'.$row['lastName'].'</td><td>'.$row['cardno'].'</td>';
