@@ -61,7 +61,7 @@
                                         echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
                                     }
                                 }else{
-                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' has allready been marked as attending today.</h4>';
+                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' has already been marked as attending today.</h4>';
                                 }
                             }
                         }
@@ -85,7 +85,7 @@
                                         echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
                                     }
                                 }else{
-                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' has allready been marked as attending today.</h4>';
+                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' has already been marked as attending today.</h4>';
                                 }
                             }
                         }elseif ($countResult['count']==0){ //Case for no results
@@ -120,7 +120,7 @@
                                         echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
                                     }
                                 }else{
-                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' has allready been marked as attending today.</h4>';
+                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' has already been marked as attending today.</h4>';
                                 }
                             }
                         }elseif ($countResult['count']==0){ //Case for no results
@@ -155,7 +155,7 @@
                                         echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
                                     }
                                 }else{
-                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' has allready been marked as attending today.</h4>';
+                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' has already been marked as attending today.</h4>';
                                 }
                             }
                         }elseif ($countResult['count']==0){ //Case for no results
@@ -192,7 +192,7 @@
                                         echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
                                     }
                                 }else{
-                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' has allready been marked as attending today.</h4>';
+                                    echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' has already been marked as attending today.</h4>';
                                 }
                             }
                         }elseif ($andCountResult['count']>1){//Case where andcount >1
