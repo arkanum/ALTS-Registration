@@ -2,6 +2,34 @@
     ini_set('display_errors', 'On');
     $dateObject = new DateTime;
     $date = $dateObject->format("d-m-Y");
+
+    class dateList {
+        
+        var $list;
+        var $currentDate;
+
+        function dateList($serial = null){ 
+            if($serial!=null){//Unserializing serialized null yeilds flase not null.
+                $this->list = unserialize($serial); 
+            }else{
+                $this->list = array();
+            }
+            $this->currentDate = $GLOBALS['date'];
+        }
+        function updateList(){
+            if(in_array($this->currentDate, $this->list)){
+                return 0;
+            }else{
+                $this->list[] = $this->currentDate;
+                return 1;
+            }
+        }
+
+        function outputForStorage(){
+            return serialize($this->list);
+        }
+
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en-gb">
@@ -21,6 +49,7 @@
                     <th>
                         <ul id="navlist">
                             <li class="navitem"><a href="/registration.php">Registration</a></li>
+                            <li class="navitem"><a href="/search.php">Search</a></li>
                             <li class="navitem">Summary</li>
                             <li class="navitem"><a href="/phpadmin/phpliteadmin.php">Database&nbspTool</a></li>
                         </ul>

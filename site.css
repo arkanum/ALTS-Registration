@@ -85,3 +85,9 @@ a{
 h2{
     color:#0083B1;
 }
+tr.memberlist:nth-child(even){
+    background-color:#EEEEEE;
+}
+td{
+    padding:1%;
+}

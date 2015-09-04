@@ -3,38 +3,9 @@
     require_once('connect.php');
 ?>
 <div class="main">
-    <div id="regisering">
+    <div id="registering">
     <?php
     //$debug = 1;
-
-    class dateList {
-        
-        var $list;
-        var $currentDate;
-
-        function dateList($serial = null){ 
-            if($serial!=null){//Unserializing serialized null yeilds flase not null.
-                $this->list = unserialize($serial); 
-            }else{
-                $this->list = array();
-            }
-            $this->currentDate = $GLOBALS['date'];
-        }
-        function updateList(){
-            if(in_array($this->currentDate, $this->list)){
-                return 0;
-            }else{
-                $this->list[] = $this->currentDate;
-                return 1;
-            }
-        }
-
-        function outputForStorage(){
-            return serialize($this->list);
-        }
-
-    }
-
 
         //Check to confirm POST was used as request method
         if ($_SERVER['REQUEST_METHOD']=='POST'){
@@ -130,7 +101,7 @@
                             echo '<table><tr><th>First Name</th><th>Last Name</th><th>Bod Card Number</th></tr>';
                             while ($row = $memberQuery->fetchArray(SQLITE3_ASSOC)){
                                     echo '<tr><td>'.$row['firstName'].'</td><td>'.$row['lastName'].'</td><td>'.$row['cardno'].'</td>';
-                                    echo '<td><form method="post" action""><input style="visibility:hidden;display:none;" type="text" name="id" value="'.$row['id'].'"/><input type="submit" class="memberbutton" value="Mark Attending"/></form></td>';
+                                    echo '<td><form method="post" action""><input style="visibility:hidden;display:none;" type="text" name="id" value="'.$row['id'].'"/><input type="submit" class="memberbutton" value="Mark Attending"/></form></td></tr>';
                             }
                             echo '</table>';
                             echo "\n";
@@ -240,7 +211,7 @@
                     <tr><td>First Name:</td><td><input type="text" name="firstName" autocomplete="off"/></td></tr>
                     <tr><td>Last Name:</td><td><input type="text" name="lastName" autocomplete="off"/></td></tr>
                     <tr><td>Bod Card Number:</td><td><input type="text" name="cardno" autocomplete="off"/></td></tr>
-                    <tr><td><input type="submit"></tr></td>
+                    <tr><td><input type="submit" value="Search"></tr></td>
                 </table>
             </form>
         </div>
@@ -268,7 +239,7 @@
                     <tr><td>First Name:</td><td><input type="text" name="firstName" autocomplete="off"/></td></tr>
                     <tr><td>Last Name:</td><td><input type="text" name="lastName" autocomplete="off"/></td></tr>
                     <tr><td>Bod Card Number:</td><td><input type="text" name="cardno" autocomplete="off"/></td></tr>
-                    <tr><td><input type="submit"></tr></td>
+                    <tr><td><input type="submit" value="Add Member"></tr></td>
                 </table>
             </form>
         </div>
