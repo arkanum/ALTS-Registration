@@ -91,3 +91,9 @@ tr.memberlist:nth-child(even){
 td{
     padding:1%;
 }
+#membertable{
+    text-align: left;
+}
+tr.memberentry:nth-child(odd){
+    background-color:#EEEEEE;
+}
