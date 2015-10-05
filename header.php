@@ -50,7 +50,7 @@
                         <ul id="navlist">
                             <li class="navitem"><a href="/registration.php">Registration</a></li>
                             <li class="navitem"><a href="/search.php">Search</a></li>
-                            <li class="navitem">Summary</li>
+                            <li class="navitem"><a href="/summary.php">Summary</a></li>
                             <li class="navitem"><a href="/phpadmin/phpliteadmin.php">Database&nbspTool</a></li>
                         </ul>
                     </th>

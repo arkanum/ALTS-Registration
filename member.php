@@ -9,10 +9,10 @@
 		if (isset($_GET['id']) && isset($_POST['id'])){
 			if (isset($_POST['comitteecheckbox'])){
 				$db->exec("UPDATE ".$members." SET comittee=1 WHERE id=".$_POST['id'].";");
-				echo '<META http-equiv="refresh" content="3">';
+				echo '<META http-equiv="refresh" content="1">';
 			}elseif (!(isset($_POST['comitteecheckbox']))){
 				$db->exec("UPDATE ".$members." SET comittee=0 WHERE id=".$_POST['id'].";");
-				echo '<META http-equiv="refresh" content="3">';
+				echo '<META http-equiv="refresh" content="1">';
 			}
 		}elseif (isset($_GET['id'])){
 			echo '<div id="member">';
