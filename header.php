@@ -2,38 +2,12 @@
     ini_set('display_errors', 'On');
     $dateObject = new DateTime;
     $date = $dateObject->format("d-m-Y");
-
-    class dateList {
-        
-        var $list;
-        var $currentDate;
-
-        function dateList($serial = null){ 
-            if($serial!=null){//Unserializing serialized null yeilds flase not null.
-                $this->list = unserialize($serial); 
-            }else{
-                $this->list = array();
-            }
-            $this->currentDate = $GLOBALS['date'];
-        }
-        function updateList(){
-            if(in_array($this->currentDate, $this->list)){
-                return 0;
-            }else{
-                $this->list[] = $this->currentDate;
-                return 1;
-            }
-        }
-
-        function outputForStorage(){
-            return serialize($this->list);
-        }
-
-    }
+    require('classdefs.php');
+    $handler = new DatabaseHandler("test.db",'trial')
 ?>
 <!DOCTYPE html>
 <html lang="en-gb">
-    <head> 
+    <head>
         <title>Alts Registration </title>
         <link rel="stylesheet" href="site.css" type="text/css" />
         <link rel="icon" type="image/png" href="/images/icons/favicon-32x32.png" sizes="32x32" />

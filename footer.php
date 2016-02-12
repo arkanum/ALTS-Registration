@@ -1,5 +1,5 @@
     </body>
 </html>
 <?php
-    $db->close();
+    // $db->close();
 ?>
