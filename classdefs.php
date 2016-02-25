@@ -18,17 +18,61 @@
         }
 
         /**
-         * This function will take a 1D and a 2D array and run a search using them
+         * Takes two arrays one containg string and one accosictive array of
+         * strings (field => value) and then creates a SQLITE3 query using
+         * the statement method.
+         * There is an optional flag to enable case insensitivity for string
+         * queries.
          */
-        function searchONE(array $field,array $keyValuePairs){
-            $
-            $statement = $this->db->prepare('SELECT :field FROM :table WHERE ')
+        function searchAND(array $field, array $keyValuePairs, $collateNocase = false){
+            $fields = implode(',',$field);
+            $statementString = "SELECT ".$fields." FROM ".$this->table." WHERE ";
+            $clauses = array();
+            foreach ($keyValuePairs as $key => $value) {
+                $clauses[] = $key."=:".$key;
+            }
+            switch ($collateNocase) {
+                case true:
+                    $statementString .= implode(' COLLATE NOCASE AND ', $clauses)." COLLATE NOCASE ;";
+                    break;
 
+                default:
+                    $statementString .= implode(' AND ', $clauses)." ;";
+                    break;
+            }
+
+            $statement = $this->db->prepare($statementString);
+            foreach ($keyValuePairs as $key => $value) {
+                $statement->bindValue(':'.$key, $value);
+            }
+            $result = $statement->execute();
+            return $result;
         }
 
-        function searchAND(){}
+        function searchOR(array $field, array $keyValuePairs, $collateNocase = false){
+            $fields = implode(',',$field);
+            $statementString = "SELECT ".$fields." FROM ".$this->table." WHERE ";
+            $clauses = array();
+            foreach ($keyValuePairs as $key => $value) {
+                $clauses[] = $key."=:".$key;
+            }
+            switch ($collateNocase) {
+                case true:
+                    $statementString .= implode(' COLLATE NOCASE OR ', $clauses)." COLLATE NOCASE ;";
+                    break;
 
-        function searchOR(){}
+                default:
+                    $statementString .= implode(' OR ', $clauses)." ;";
+                    break;
+            }
+
+            $statement = $this->db->prepare($statementString);
+            foreach ($keyValuePairs as $key => $value) {
+                $statement->bindValue(':'.$key, $value);
+            }
+            $result = $statement->execute();
+            return $result;
+        }
     }
 
     class dateList {
