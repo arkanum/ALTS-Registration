@@ -1,7 +1,7 @@
 /* Webfont: Raleway_thin */
 @font-face {
     font-family: 'Raleway';
-    src: url('/fonts/Raleway-ExtraLight.ttf') format('truetype'); 
+    src: url('/fonts/Raleway-ExtraLight.ttf') format('truetype');
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
@@ -18,7 +18,7 @@ body{
     margin:inherit;
     background-color:#0083af;
     color:#FFFFFF;
-    
+
 }
 .main{
     padding-right:1em;
@@ -29,7 +29,7 @@ body{
     margin:inherit;
     padding-right:10%;
     padding-left:10%;
-    
+
 }
 #logo{
     /*padding-right:20%;*/
@@ -59,7 +59,7 @@ a{
     color: inherit;
     margin: 0 auto;
     text-align: center;
-    
+
 }
 #existingmember{
     width:70%;
@@ -71,12 +71,12 @@ a{
     float:left;
     overflow:hidden;
 }
-#comittee{
+#committee{
     width:30%;
     float:right;
     overflow:hidden;
 }
-.comitteebutton{
+.committeebutton{
     width:100%;
 }
 .memberbutton{

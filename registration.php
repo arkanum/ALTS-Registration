@@ -12,7 +12,7 @@
             echo '<h2>Attendance</h2>';
             //Delineate member creation from attendace
             if (!isset($_POST['newmember'])){
-                //Comitee button attendace
+                //Committee button attendace
                 if (isset($_POST['id'])){
                     //Check for conflicsts in id number. This whole thing should never go wrong as id should be unique.
                     $countQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE id='.$_POST['id'].';');
@@ -40,7 +40,7 @@
                 }elseif ($_POST['cardno']!=''){
                     //Process for cardno clashes. This probably shouldn't happen, but i haven't made cardno unique so it may happen.
                     $countQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE cardno='.$_POST['cardno'].';');      //Find number of entries with that cardno
-                    if ($countQuery instanceof SQLite3Result){      
+                    if ($countQuery instanceof SQLite3Result){
                         $countResult = $countQuery->fetchArray(SQLITE3_ASSOC);
                         if ($countResult['count']==1){  //Cases for only one result. Much the same as for id. This should not fail.
                             $memberQuery = $db->query('SELECT id, firstName, lastName, dateArray FROM '.$members.' WHERE cardno='.$_POST['cardno'].';');
@@ -142,7 +142,7 @@
                             echo "\n";
                         }
                     }
-                    
+
                 }elseif (($_POST['firstName'] != '') && ($_POST['lastName'] != '')){ //firstName and lastName searches
                     $andCountQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" AND lastName="'.$_POST['lastName'].'" COLLATE NOCASE;');
                     $orCountQuery = $db->query('SELECT count(*) as count FROM '.$members.' WHERE firstName="'.$_POST['firstName'].'" OR lastName="'.$_POST['lastName'].'" COLLATE NOCASE;');
@@ -192,7 +192,7 @@
             }else{
                 $newDateArray = new DateList();
                 $newDateArray->updateList();
-                $stmt = $db->prepare("INSERT INTO ".$members." (firstName,lastName,cardno,sessionsAttended,comittee,dateArray) VALUES ('".$_POST['firstName']."','".$_POST['lastName']."',".$_POST['cardno'].",1,0,:array);");
+                $stmt = $db->prepare("INSERT INTO ".$members." (firstName,lastName,cardno,sessionsAttended,committee,dateArray) VALUES ('".$_POST['firstName']."','".$_POST['lastName']."',".$_POST['cardno'].",1,0,:array);");
                 $stmt->bindParam(':array',$newDateArray->outputForStorage());
                 if ($stmt->execute()){
                     echo "<h4>New Member ".$_POST['firstName']." ".$_POST['lastName']." added</h4>";
@@ -216,14 +216,14 @@
             </form>
         </div>
     </div>
-    <div id="comittee">
-        <h2>Comitee Members</h2>
+    <div id="committee">
+        <h2>Commitee Members</h2>
         <table>
             <?php
-                $comitteeQuery = $db->query('SELECT id, firstName, lastName, cardno FROM '.$members.' WHERE comittee==1;');
-                if ($comitteeQuery instanceof SQLite3Result){
-                    while ($row = $comitteeQuery->fetchArray(SQLITE3_ASSOC)){
-                           echo '<tr><td><form method="post" action=""><input style="visibility:hidden;display:none;" type="text" name="id" value="'.$row['id'].'"/><input type="submit" class="comitteebutton" value="'.$row['firstName'].' '.$row['lastName'].'"/></form></td></tr>';
+                $committeeQuery = $db->query('SELECT id, firstName, lastName, cardno FROM '.$members.' WHERE committee==1;');
+                if ($committeeQuery instanceof SQLite3Result){
+                    while ($row = $committeeQuery->fetchArray(SQLITE3_ASSOC)){
+                           echo '<tr><td><form method="post" action=""><input style="visibility:hidden;display:none;" type="text" name="id" value="'.$row['id'].'"/><input type="submit" class="committeebutton" value="'.$row['firstName'].' '.$row['lastName'].'"/></form></td></tr>';
                    }
                 }
                echo "\n";

@@ -3,7 +3,7 @@
     $dateObject = new DateTime;
     $date = $dateObject->format("d-m-Y");
     require('classdefs.php');
-    $handler = new DatabaseHandler("test.db",'trial')
+    $handler = new DatabaseHandler('test.db','trial')
 ?>
 <!DOCTYPE html>
 <html lang="en-gb">
@@ -31,6 +31,6 @@
                 </tr>
             </table>
             <span id="datecheck">
-                <h3>Current Date: <?php echo $date;?> Is this correct? If not change your computers clock and restart the server.</h3>
+                <h3>Current Date: <?php echo $date;?> Is this correct? If not change your computer's clock and restart the server.</h3>
             </span>
         </div>
