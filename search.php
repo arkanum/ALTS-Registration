@@ -1,6 +1,5 @@
 <?php
     require_once('header.php');
-    require_once('connect.php');
 ?>
 <div class="main">
     <div id="searching">
@@ -25,10 +24,9 @@
 
 	    }else{
 	    	echo '<h2>Members</h2>';
-	    	$userQuery = $db->query('SELECT id,firstName, lastName, cardno, dateArray FROM '.$members.' ORDER BY lastName ASC;');
-	    	if ($userQuery instanceof SQLite3Result){
+	    	$userResult = $handler->search(array("id", "firstName", "lastName", "cardno", "dateArray"), array(),"ORDER BY lastName ASC");
 	    		echo '<table><tr class="memberlist"><th>First Name</th><th>Last Name</th><th>Bod Card No.</th><th>Last Session Attended<th><th></th></tr>';
-	    		while ($row = $userQuery->fetcharray(SQLITE3_ASSOC)){
+	    		while ($row = $userResult->fetcharray(SQLITE3_ASSOC)){
 	    			$tempDate = new dateList($row['dateArray']);
 	    			$lastSession = end($tempDate->list);
 	    			echo '<tr class="memberlist">';
@@ -37,7 +35,6 @@
 	    			echo '</tr>';
 	    		}
 	    		echo '</table>';
-	    	}
 	    }
 
 

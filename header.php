@@ -3,7 +3,7 @@
     $dateObject = new DateTime;
     $date = $dateObject->format("d-m-Y");
     require('classdefs.php');
-    $handler = new DatabaseHandler('test.db','trial')
+    $handler = new DatabaseHandler('test.db','members')
 ?>
 <!DOCTYPE html>
 <html lang="en-gb">

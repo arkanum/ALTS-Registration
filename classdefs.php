@@ -17,6 +17,31 @@
             $this->db->close();
         }
 
+        function search(array $field, array $keyValuePairs, $extras = ""){
+            $fields = implode(', ',$field);
+            $statementString = "SELECT ".$fields." FROM ".$this->table;
+            if (!empty($keyValuePairs)){
+                $statementString.= " WHERE ";
+                $clauses = array();
+                foreach ($keyValuePairs as $key => $value) {
+                    $clauses[] = $key."=:".$key;
+                }
+                $statementString .= implode(' AND ', $clauses);
+            }
+            $statementString .= " ".$extras." ;";
+
+            $statement = $this->db->prepare($statementString);
+            foreach ($keyValuePairs as $key => $value) {
+                $statement->bindValue(':'.$key, $value);
+            }
+            $result = $statement->execute();
+            if ($result instanceof SQLite3Result){
+                return $result;
+            }else{
+                exit("Something went wrong with the database query try again.");
+            }
+        }
+
         /**
          * Takes two arrays one containg string and one accosictive array of
          * strings (field => value) and then creates a SQLITE3 query using
@@ -25,7 +50,7 @@
          * queries.
          */
         function searchAND(array $field, array $keyValuePairs, $collateNocase = false){
-            $fields = implode(',',$field);
+            $fields = implode(', ',$field);
             $statementString = "SELECT ".$fields." FROM ".$this->table." WHERE ";
             $clauses = array();
             foreach ($keyValuePairs as $key => $value) {
@@ -46,11 +71,15 @@
                 $statement->bindValue(':'.$key, $value);
             }
             $result = $statement->execute();
-            return $result;
+            if ($result instanceof SQLite3Result){
+                return $result;
+            }else{
+                exit("Something went wrong with the database query try again.");
+            }
         }
 
         function searchOR(array $field, array $keyValuePairs, $collateNocase = false){
-            $fields = implode(',',$field);
+            $fields = implode(', ',$field);
             $statementString = "SELECT ".$fields." FROM ".$this->table." WHERE ";
             $clauses = array();
             foreach ($keyValuePairs as $key => $value) {
@@ -71,7 +100,11 @@
                 $statement->bindValue(':'.$key, $value);
             }
             $result = $statement->execute();
-            return $result;
+            if ($result instanceof SQLite3Result){
+                return $result;
+            }else{
+                exit("Something went wrong with the database query try again.");
+            }
         }
     }
 
