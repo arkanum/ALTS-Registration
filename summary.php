@@ -17,7 +17,7 @@
 		?></p>
 
 		<h2>Numbers</h2>
-		A .csv file of this data has been generated and is in the root folder.
+		A .csv file of this data has been generated and is in the root folder or <h5 style="display:inline;color:#0083AF;"><a href="AttendanceHistogram.csv">here</a></h5>.
 		<table><tr class="tableheader"><th>Date</th><th>Number of People</th></tr>
 		<?php
 			//Generate an array of all of the dates

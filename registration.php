@@ -16,12 +16,10 @@
                     //Check for conflicsts in id number. This whole thing should never go wrong as id should be unique.
                     $countResult = $handler->searchAND(array("count(*) as count"), array("id" => $_POST['id']))->fetchArray(SQLITE3_ASSOC);
                     if ($countResult['count']==1){
-                        $memberResult = $handler->searchAND(array("firstName", "lastName", "dateArray"),array("id" => $_POST['id']))->fetchArray(SQLITE3_ASSOC);
+                        $memberResult = $handler->searchAND(array("firstName", "lastName", "dateArray", "sessionsAttended"),array("id" => $_POST['id']))->fetchArray(SQLITE3_ASSOC);
                         $tempDateArray = new dateList($memberResult['dateArray']);
                         if ($tempDateArray->updateList()){
-                            $stmt = $handler->db->prepare('UPDATE '.$handler->table.' SET sessionsAttended = sessionsAttended + 1, dateArray =:array WHERE id='.$_POST['id'].';');
-                            $stmt->bindParam(':array',$tempDateArray->outputForStorage());
-                            if ($stmt->execute()){
+                            if ($handler->update(array("sessionsAttended" => $memberResult['sessionsAttended'] + 1, "dateArray" => $tempDateArray->outputForStorage()), array("id" => $_POST['id']))){
                                 echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
                             }else{
                                 echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
@@ -35,12 +33,10 @@
                 }elseif ($_POST['cardno']!=''){
                     $countResult = $handler->searchAND(array("count(*) as count"), array("cardno" => $_POST['cardno']))->fetchArray(SQLITE3_ASSOC);
                     if ($countResult['count']==1){  //Cases for only one result. Much the same as for id. This should not fail.
-                        $memberResult = $handler->searchAND(array("id", "firstName", "lastName", "dateArray"),array("cardno" => $_POST['cardno']))->fetchArray(SQLITE3_ASSOC);
+                        $memberResult = $handler->searchAND(array("id", "firstName", "lastName", "dateArray", "sessionsAttended"),array("cardno" => $_POST['cardno']))->fetchArray(SQLITE3_ASSOC);
                         $tempDateArray = new dateList($memberResult['dateArray']);
                         if ($tempDateArray->updateList()){
-                            $stmt = $handler->db->prepare('UPDATE '.$handler->table.' SET sessionsAttended = sessionsAttended + 1, dateArray =:array WHERE id='.$memberResult['id'].';');
-                            $stmt->bindParam(':array',$tempDateArray->outputForStorage());
-                            if ($stmt->execute()){
+                            if ($handler->update(array("sessionsAttended" => $memberResult['sessionsAttended'] + 1, "dateArray" => $tempDateArray->outputForStorage()), array("id" => $memberResult['id']))){
                                 echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
                             }else{
                                 echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
@@ -64,12 +60,10 @@
                     //firstName clash check
                     $countResult = $handler->searchAND(array("count(*) as count"), array("firstName" => $_POST['firstName']), true)->fetchArray(SQLITE3_ASSOC);
                     if ($countResult['count']==1){  //Case for no clashes
-                        $memberResult = $handler->searchAND(array("id", "firstName", "lastName", "dateArray"),array("firstName" => $_POST['firstName']), true)->fetchArray(SQLITE3_ASSOC);
+                        $memberResult = $handler->searchAND(array("id", "firstName", "lastName", "dateArray", "sessionsAttended"),array("firstName" => $_POST['firstName']), true)->fetchArray(SQLITE3_ASSOC);
                         $tempDateArray = new dateList($memberResult['dateArray']);
                         if ($tempDateArray->updateList()){
-                            $stmt = $handler->db->prepare('UPDATE '.$handler->table.' SET sessionsAttended = sessionsAttended + 1, dateArray =:array WHERE id='.$memberResult['id'].';');
-                            $stmt->bindParam(':array',$tempDateArray->outputForStorage());
-                            if ($stmt->execute()){
+                            if ($handler->update(array("sessionsAttended" => $memberResult['sessionsAttended'] + 1, "dateArray" => $tempDateArray->outputForStorage()), array("id" => $memberResult['id']))){
                                 echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
                             }else{
                                 echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
@@ -93,12 +87,10 @@
                     //lastName clash check
                     $countResult = $handler->searchAND(array("count(*) as count"),array("lastName" => $_POST['lastName']),true)->fetchArray(SQLITE3_ASSOC);
                     if ($countResult['count']==1){  //Case for no clashes
-                        $memberResult = $handler->searchAND(array("id", "firstName", "lastName", "dateArray"),array("lastName" => $_POST['lastName']), true)->fetchArray(SQLITE3_ASSOC);
+                        $memberResult = $handler->searchAND(array("id", "firstName", "lastName", "dateArray", "sessionsAttended"),array("lastName" => $_POST['lastName']), true)->fetchArray(SQLITE3_ASSOC);
                         $tempDateArray = new dateList($memberResult['dateArray']);
                         if ($tempDateArray->updateList()){
-                            $stmt = $handler->db->prepare('UPDATE '.$handler->table.' SET sessionsAttended = sessionsAttended + 1, dateArray =:array WHERE id='.$memberResult['id'].';');
-                            $stmt->bindParam(':array',$tempDateArray->outputForStorage());
-                            if ($stmt->execute()){
+                            if ($handler->update(array("sessionsAttended" => $memberResult['sessionsAttended'] + 1, "dateArray" => $tempDateArray->outputForStorage()), array("id" => $memberResult['id']))){
                                 echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
                             }else{
                                 echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';
@@ -122,12 +114,10 @@
                         $andCountResult = $handler->searchAND(array("count(*) as count"), array("firstName" => $_POST['firstName'], "lastName" => $_POST['lastName']),true)->fetchArray(SQLITE3_ASSOC);
                         $orCountResult = $handler->searchOR(array("count(*) as count"), array("firstName" => $_POST['firstName'], "lastName" => $_POST['lastName']),true)->fetchArray(SQLITE3_ASSOC);
                         if ($andCountResult['count']==1){//Case where andcount is 1
-                            $memberResult = $handler->searchAND(array("id", "firstName", "lastName", "dateArray"), array("firstName" => $_POST['firstName'], "lastName" => $_POST['lastName']),true)->fetchArray(SQLITE3_ASSOC);
+                            $memberResult = $handler->searchAND(array("id", "firstName", "lastName", "dateArray", "sessionsAttended"), array("firstName" => $_POST['firstName'], "lastName" => $_POST['lastName']),true)->fetchArray(SQLITE3_ASSOC);
                             $tempDateArray = new dateList($memberResult['dateArray']);
                             if ($tempDateArray->updateList()){ //Check if they have attended today
-                                $stmt = $handler->db->prepare('UPDATE '.$handler->table.' SET sessionsAttended = sessionsAttended + 1, dateArray =:array WHERE id='.$memberResult['id'].';');
-                                $stmt->bindParam(':array',$tempDateArray->outputForStorage());
-                                if ($stmt->execute()){
+                                if ($handler->update(array("sessionsAttended" => $memberResult['sessionsAttended'] + 1, "dateArray" => $tempDateArray->outputForStorage()), array("id" => $memberResult['id']))){
                                     echo '<h4>'.$memberResult['firstName'].' '.$memberResult['lastName'].' marked as attending.</h4>';
                                 }else{
                                     echo '<h1>Something went really wrong! Please record what happened and what you did before it happened and tell the IT Rep.';

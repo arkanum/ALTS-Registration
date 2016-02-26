@@ -17,9 +17,16 @@
             $this->db->close();
         }
 
-        function search(array $field, array $keyValuePairs, $extras = ""){
-            $fields = implode(', ',$field);
-            $statementString = "SELECT ".$fields." FROM ".$this->table;
+        /**
+         * Takes two arrays one containing string and one associative array of
+         * strings (field => value) and then creates a SQLITE3 query using
+         * the statement method.
+         * There is an optional flag to enable case insensitivity for string
+         * queries.
+         */
+        function search(array $fields, array $keyValuePairs, $extras = ""){
+            $columns = implode(', ',$fields);
+            $statementString = "SELECT ".$columns." FROM ".$this->table;
             if (!empty($keyValuePairs)){
                 $statementString.= " WHERE ";
                 $clauses = array();
@@ -43,15 +50,15 @@
         }
 
         /**
-         * Takes two arrays one containg string and one accosictive array of
+         * Takes two arrays one containing string and one associative array of
          * strings (field => value) and then creates a SQLITE3 query using
          * the statement method.
          * There is an optional flag to enable case insensitivity for string
          * queries.
          */
-        function searchAND(array $field, array $keyValuePairs, $collateNocase = false){
-            $fields = implode(', ',$field);
-            $statementString = "SELECT ".$fields." FROM ".$this->table." WHERE ";
+        function searchAND(array $fields, array $keyValuePairs, $collateNocase = false){
+            $columns = implode(', ',$fields);
+            $statementString = "SELECT ".$columns." FROM ".$this->table." WHERE ";
             $clauses = array();
             foreach ($keyValuePairs as $key => $value) {
                 $clauses[] = $key."=:".$key;
@@ -78,9 +85,16 @@
             }
         }
 
-        function searchOR(array $field, array $keyValuePairs, $collateNocase = false){
-            $fields = implode(', ',$field);
-            $statementString = "SELECT ".$fields." FROM ".$this->table." WHERE ";
+        /**
+         * Takes two arrays one containing string and one associative array of
+         * strings (field => value) and then creates a SQLITE3 query using
+         * the statement method.
+         * There is an optional flag to enable case insensitivity for string
+         * queries.
+         */
+        function searchOR(array $fields, array $keyValuePairs, $collateNocase = false){
+            $columns = implode(', ',$fields);
+            $statementString = "SELECT ".$columns." FROM ".$this->table." WHERE ";
             $clauses = array();
             foreach ($keyValuePairs as $key => $value) {
                 $clauses[] = $key."=:".$key;
@@ -105,6 +119,33 @@
             }else{
                 exit("Something went wrong with the database query try again.");
             }
+        }
+
+        function update(array $updateData, array $keyValuePairs){
+            $data = array();
+            $conditions = array();
+            foreach ($updateData as $key => $value) {
+                $data[] = $key."=:".$key;
+            }
+            foreach ($keyValuePairs as $key => $value) {
+                $conditions[] = $key."=:".$key;
+            }
+            $statementString = "UPDATE ".$this->table." SET ".implode(", ",$data)." WHERE ".implode(" AND ",$conditions).";";
+
+            $statement = $this->db->prepare($statementString);
+            foreach (array_merge($updateData, $keyValuePairs) as $key => $value) {
+                $statement->bindValue(':'.$key, $value);
+            }
+            $result = $statement->execute();
+            if ($result instanceof SQLite3Result){
+                return true;
+            }else{
+                exit("Something went wrong with the database query try again.");
+            }
+        }
+
+        function insert(){
+
         }
     }
 
@@ -136,6 +177,4 @@
         }
 
     }
-
-
 ?>
