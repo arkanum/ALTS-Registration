@@ -90,6 +90,7 @@ tr.memberlist:nth-child(even){
 }
 td{
     padding:1%;
+    white-space: nowrap;
 }
 #membertable{
     text-align: left;

@@ -144,8 +144,22 @@
             }
         }
 
-        function insert(){
-
+        function insert(array $fields, array $keyValuePairs){
+            $columns = implode(',',$fields);
+            foreach ($keyValuePairs as $key => $value) {
+                $values[] = ":".$key;
+            }
+            $statementString = "INSERT INTO ".$this->table. "(".$columns.") VALUES (".implode(',', $values).");";
+            $statement = $this->db->prepare($statementString);
+            foreach ($keyValuePairs as $key => $value) {
+                $statement->bindValue(':'.$key, $value);
+            }
+            $result = $statement->execute();
+            if ($result instanceof SQLite3Result){
+                return $result;
+            }else{
+                exit("Something went wrong with the database query try again.");
+            }
         }
     }
 
@@ -175,6 +189,10 @@
         function outputForStorage(){
             return serialize($this->list);
         }
-
     }
+
+    //Used on summary page for uksort. Most recent date fisrt
+    function datecompare($date1,$date2){
+            return strtotime($date2)-strtotime($date1);
+        }
 ?>

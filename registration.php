@@ -150,9 +150,7 @@
             }else{
                 $newDateArray = new DateList();
                 $newDateArray->updateList();
-                $stmt = $handler->db->prepare("INSERT INTO ".$handler->table." (firstName,lastName,cardno,sessionsAttended,committee,dateArray) VALUES ('".$_POST['firstName']."','".$_POST['lastName']."',".$_POST['cardno'].",1,0,:array);");
-                $stmt->bindParam(':array',$newDateArray->outputForStorage());
-                if ($stmt->execute()){
+                if ($handler->insert(array("firstName", "lastName", "cardno", "sessionsAttended", "committee", "dateArray"), array("firstName" => $_POST['firstName'], "lastName" => $_POST['lastName'], "cardno" => $_POST['cardno'], "sessionsAttended" => 1, "committee" => 0, "dateArray" => $newDateArray->outputForStorage()))){
                     echo "<h4>New Member ".$_POST['firstName']." ".$_POST['lastName']." added</h4>";
                 }else{
                     echo "<h4>Failed to add new member. Try again maybe?</h4>";
