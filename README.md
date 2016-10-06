@@ -16,6 +16,7 @@ Change the file path on lines 243 & 244 to the website root folder on your compu
 If you have allready have server software: Ensure that sqlite is enabled (default for php5.4 and above I think), then copy the files to the web directory
 
 You can use the software from multiple computers at once. The steps are:
+
 1. Open the server on computer one.
 2. Connect computer one to a network.
 3. On computer one press `WIN+R` then type `cmd` then press enter.
