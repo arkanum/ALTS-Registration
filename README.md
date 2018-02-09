@@ -15,6 +15,8 @@ Change the file path on lines 243 & 244 to the website root folder on your compu
 
 If you have allready have server software: Ensure that sqlite is enabled (default for php5.4 and above I think), then copy the files to the web directory
 
+If you are using XAMPP you may need to uncomment lines in the php.ini file to enable sqlite3. 
+
 You can use the software from multiple computers at once. The steps are:
 
 1. Open the server on computer one.
